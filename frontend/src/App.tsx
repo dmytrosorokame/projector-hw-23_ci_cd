@@ -34,7 +34,7 @@ function App() {
 
   return (
     <div>
-      <h1>Elasticsearch Autocomplete v3</h1>
+      <h1>Elasticsearch Autocomplete v4</h1>
 
       <div>
         Search: <input type="text" value={input} onChange={handleInputChange} />
