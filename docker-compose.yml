@@ -1,0 +1,49 @@
+services:
+  elasticsearch:
+    image: elasticsearch:8.17.1
+    container_name: elasticsearch
+    ports:
+      - 9200:9200
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=changeme
+    volumes:
+      - elasticsearch_volume:/usr/share/elasticsearch/data
+
+  kibana:
+    image: kibana:8.17.1
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=changeme
+      - XPACK_SECURITY_ENABLED=false
+    depends_on:
+      - elasticsearch
+    volumes:
+      - kibana_volume:/usr/share/kibana/data
+
+  backend:
+    build: ./backend
+    container_name: backend
+    depends_on:
+      - elasticsearch
+    ports:
+      - 8000:8000
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./deployment/Dockerfile
+    depends_on:
+      - backend
+    container_name: frontend
+    ports:
+      - 80:80
+
+volumes:
+  elasticsearch_volume:
+  kibana_volume:
