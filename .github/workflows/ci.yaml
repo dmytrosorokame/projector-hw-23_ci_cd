@@ -1,6 +1,6 @@
 name: Continuous Integration (Run lint and test)
 
-on: [pull_request, push]
+on: [pull_request]
 
 jobs:
   lint-and-test:
